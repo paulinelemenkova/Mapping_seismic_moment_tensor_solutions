@@ -1,0 +1,1 @@
+# Mapping_seismic_moment_tensor_solutions
