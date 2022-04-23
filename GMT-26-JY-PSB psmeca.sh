@@ -1,6 +1,5 @@
 #!/bin/sh
-# Purpose: geological map
-# Area: Philippine Sea Basin
+# Purpose: focal mechanisms of the earthquakes in the Philippine Sea Basin
 # Behrman prj. GMT modules: gmtset, gmtdefaults, makecpt, grdcut, grdinfo, pscoast, psbasemap, grdcontour, project, psxy, pslegend, pstext, logo, psconvert
 # Generate a file
 # Extract a subset of GEBCO for the study area
