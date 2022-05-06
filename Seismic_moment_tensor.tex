@@ -1,0 +1,446 @@
+\documentclass{rrparticle}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{acro}
+	\acsetup{make-links=true}
+\usepackage{setspace}
+%%%%%%%%%%% Acronyms %%%%%%%%%%%
+\DeclareAcronym{gebco}{
+	short=GEBCO,
+	long=General Bathymetric Chart of the Oceans,
+}
+\DeclareAcronym{psp}{
+	short=PSP,
+	long=Philippine Sea Plate,
+}
+\DeclareAcronym{gmt}{
+	short=GMT,
+	long=Generic Mapping Tools,
+}
+\DeclareAcronym{psb}{
+	short=PSB,
+	long=Philippine Sea Basin,
+}
+\DeclareAcronym{cmt}{
+	short=CMT,
+	long=Centroid Moment Tensor,
+}
+\DeclareAcronym{isc}{
+	short=ISC,
+	long=International Seismological Centre,
+}
+\DeclareAcronym{gps}{
+	short=GPS,
+	long=Global Positioning System,
+}
+\DeclareAcronym{ehb}{
+	short=EHB,
+	long=Engdahl-van der Hilst-Buland algorithm,
+}
+\DeclareAcronym{kml}{
+	short=KML,
+	long=Keyhole Markup Language,
+}
+\DeclareAcronym{gshhgd}{
+	short=GSHHGD,
+	long=Global Self-consistent Hierarchical High-resolution Geography Database,
+}
+\DeclareAcronym{pvel}{
+	short=PVEL,
+	long=Pacific VELocity,
+}
+\DeclareAcronym{morvel}{
+	short=MORVEL,
+	long=Mid-Ocean Ridge VELocity,
+}
+\DeclareAcronym{wgs84}{
+	short=WGS84,
+	long=World Geodetic System 1984,
+}
+\DeclareAcronym{kmz}{
+	short=KMZ,
+	long=Keyhole Markup language Zipped,
+}
+\DeclareAcronym{egm96}{
+	short=EGM96,
+	long=Earth Gravitational Model 1996,
+}
+\DeclareAcronym{egm2008}{
+	short=EGM2008,
+	long=Earth Gravitational Model 2008,
+}
+\DeclareAcronym{gis}{
+	short=GIS,
+	long=Geographic Information System,
+}
+\DeclareAcronym{ascii}{
+	short=ASCII,
+	long=American Standard Code for Information Interchange,
+}
+\DeclareAcronym{ibm}{
+	short=IBM,
+	long=Izu-Bonin-Mariana trench,
+}
+\DeclareAcronym{kpr}{
+	short=KPR,
+	long= Kyushu-Palau Ridge,
+}
+\DeclareAcronym{mw}{
+	short=Mw,
+	long= Moment magnitude,
+}
+\DeclareAcronym{mb}{
+	short=Mb,
+	long= Body wave magnitude,
+}
+\DeclareAcronym{ms}{
+	short=Ms,
+	long= Surface wave magnitude,
+}
+\DeclareAcronym{rs}{
+	short=RS,
+	long= Richter Scale,
+}
+\DeclareAcronym{gui}{
+	short=GUI,
+	long= Graphical User Interface,
+}
+
+%%%%%%%%%%% Acronyms %%%%%%%%%%%
+
+\usepackage[usenames,dvipsnames,svgnames]{xcolor}
+\usepackage[hidelinks=true,bookmarks=true,hyperindex,breaklinks]{hyperref}
+	\hypersetup{bookmarksdepth=paragraph,colorlinks=true,linkcolor=black,urlcolor=Navy,citecolor=black}
+	% colorlinks=false,frenchlinks=true,pdfborder={0 0 1}
+	
+
+%Obviously, the commands below are not really needed when typesetting your contribution!!!
+\newcommand{\miktex}{\hbox{Mik\kern-.15em\TeX}}
+\newcommand{\texlive}{\hbox{\TeX Live}}
+
+\title{Seismic moment tensor solutions for geophysical mapping of the Philippine Sea basin by GMT} 
+\author[1]{Polina Lemenkova}
+
+\affil[1]{Université Libre de Bruxelles, École polytechnique de Bruxelles (EPB, Brussels Faculty of Engineering), Laboratory of Image Synthesis and Analysis. Building L, Campus de Solbosch CP131/3, Avenue Franklin D. Roosevelt 50, B-1050 Brussels, Belgium, EU. ORCID ID: https://orcid.org/0000-0002-5759-1089.
+
+Email: {\em polina.lemenkova@ulb.be}}
+
+\keywords{Earthquake, seismicity, cartography, shell script, Pacific Ocean}
+\pacs{91.30.Vc, 91.10.Da, 91.30.Cd, 91.10.-v, 91.30.Hc, 93.30.-w, 91.60.-x, 93.85.-q, 91.30.Uv, 91.10.-v, 91.10.Ws, 91.30.Dk, 91.30.-f, 91.30.Bi}
+
+\hyphenation{rrp-ar-ti-cle}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+This paper presents a GMT scripting technique for mapping seismic moment tensor solutions. The underlying geophysical properties and settings of the \ac{psp} situated on the margins of the Pacific Ocean are analysed. Active volcanism and high seismicity of this region located along the margins of the \ac{psb} results in a series of  earthquake events caused by geodynamic processes of tectonic plate subduction. The proposed console-based framework of cartographic workflow is designed to perform mapping of the earthquake events using \ac{gmt} modules, to analyse seismic setting through visualisation of the geophysical dataset. The materials include \ac{gebco}, \ac{cmt} and \ac{isc} seismic data. Technically, the algorithm of mapping by \ac{gmt} consists in a consecutive use of modules used in a script run from a command line: 'psmeca', 'psvelo', 'img2grd', 'grdtrack', 'grdimage'. The \ac{gmt} functionality is illustrated by the key snippets of code. The path to the full codes is provided with a link to the author's GitHub repository for technical repeatability. Furthermore, the algorithm of \ac{gmt} enabled to visualise \ac{cmt} solutions for shallow depth earthquakes of Mw <10 along the \ac{psb} margins from 1976 to 2010. Thus, the paper also demonstrated and presented the performance of the \ac{gmt} on a geophysical dataset that features complete earthquakes data along the zone of tectonic plate subduction from the Global \ac{cmt} Project. In both technical and geophysical cases, this approach of \ac{gmt}-based mapping presents cartographic workflow better than state-of-the-art traditional GIS programs through increased automation of the cartographic workflow. The study contributed to the development of methods of geophysical and seismic mapping using \ac{gmt} scripting toolset by visualising focal mechanisms and seismic moment tensor solutions. 
+
+\end{abstract}
+
+\section{Introduction}
+
+\subsection{Background}
+This paper addresses the problem of cartographic data handling for geophysical mapping. The study area includes seismically active region of the seafloor located on the borders of the tectonic plates in the \ac{psb} located in the west Pacific Ocean. Subducting lithosphere plates activate complex processes along their margins that results in complex seismic activities in the upper mantle and associated repetitive submarine earthquakes \cite{KIMURA200918,TANGYOUBIAO1990219,HORI200685,Uchida}. Mapping such tectonically unstable regions is critical for analysis of the seismicity, as it helps highlighting the relationship among earthquake location and complexity of the marine geophysical processes \cite{ZU2021106800,SACKS19843,IIDAKA201741,LI2020102127}. A lack of knowledge of the topography of the seabed restricts the progress of geophysical investigations of the oceans as well as geological exploration and exploiting mineral resources which might be found in the bed of the ocean \cite{HILL1957129}. This rises a question of developing advanced methods of geophysical mapping.
+
+Advances in programming made an application of scripting in cartographic mapping become real: using programming codes for generating maps from a console in a semi-automated regime \cite{Buetal,Lemenkova2022c,6910592}. Using scripting techniques is beneficial for geophysical studies from rapid and accurate data processing. For instance, in the analysis of large seismic datasets with complex multi-column tables, the capability of machine-based executing script is highly desirable for quick data visualisation and analysis \cite{9497221,7951907,7363985}. Specifically for marine geophysics, it is necessary to use the advanced cartographic tools that can be used for mapping seismic data in advance of any potential risk of geologic activities and help preventing natural hazards, such as earthquakes and tsunamis \cite{SUZUKI201690,SAITO2019228166}. 
+
+Although seismic mapping and prediction of geophysical hazards is quite an important problem in studies of physics of the Earth, using cartographic scripting techniques remains a novel method for the domain of marine geophysics where state-of-the-art software such as GIS is traditionally used. This work proposes a scripting cartographic framework based on using the \ac{gmt}, which has a modular structure enabling cartographic elements to be plotted from the console. In order to enable the repeatability of the methods and to test the efficacy of the workflow, the most important fragments of scripts are presented with the full access to the codes provided using the GitHub repository of the author. 
+
+Specifically, this paper proposes a novel approach for accurate and rapid cartographic visualisation of the geophysical data aimed at visualising seismic parameters reflecting complex geophysical activities in the west region of the Pacific Ocean: the \ac{psb}. Advanced cartographic visualisation helps discovering the casual relationships between constituent geophysical and geological processes reflected in predicted seismic characteristics in the given region of the seafloor. the key of the scripting approach in cartography is to utilise the modules of \ac{gmt} for plotting cartographic units, structures and elements on the map. It is thus possible to make the use of modules for automated mapping through the templates for subsequent maps in a series, which optimises mapping workflow through automation. 
+
+Active use of the machine-based cartographic data processing provides an effective tool for real-time mapping, which is crucial for geophysical mapping. It is especially actual for mapping high seismicity regions where accurate and rapid data visualisation is needed for prognosis and operative preventing of seismic risks. The script-based mapping of geophysical data was performed using the materials obtained from the open sources, such as \ac{gebco}, \ac{cmt} and \ac{isc} seismic data. The use of \ac{gmt} achieved superior performance for geophysical mapping and improved the workflow of the cartographic techniques. 
+
+\subsection{Related Work}
+
+Earlier studies on the marine geophysical mapping highlighted right relationship between the geomorphic patterns of the deep-sea channels, submarine fans and their topography related to the mid-ocean ridge tectonics, volcanism and dynamics of the Philippine back arc \cite{Menard,Chang,Fujioka1999,Lemenkova2019b,Hall1995b}, as well as earthquakes and gravitation \cite{LinLo}. Double seismic zone beneath the Mariana Island arc is well explained by the conceptual scheme of the processes of the global plate tectonics \cite{Samowitz}. Thus, subduction of the cooled plate into the mantle causes formation of the deep ocean trenches where earthquakes and tsunamis originate as a consequence of high seismicity. 
+
+Regional geomorphology of the seafloor is formed under certain geologic-geophysical interactions affected by the influence of particular tectonic and geodynamic processes. Thus, the geomorphological evolution of the seafloor is largely controlled by geological evolution and tectonic plate dynamics \cite{Fujioka2002,Gong,Lemenkova2019a,Lemenkova2021a}, geophysical processes \cite{Seekings,Hall1995a,Ogawa}, submarine volcanism and seismicity se\cite{Ozawa,Lemenkova2020g,Lemenkova2021e}. Mapping geological structure and visualising geophysical setting is a basic methodology for recognition of complex geophysical activities on the seafloor of the Pacific Ocean \cite{PARCUTELA2020100032,BARRETTO2020106052,QINGYUN2021103504}. These studies extend the types and strength of geological processes, including seismicity, that can be better understood by mapping.
+
+Active volcanism around Philippine Sea margins (Fig. \ref{pic5}) shows earthquake events demonstrating high seismicity of the region caused by tectonic plates subduction. Thus, subducting lithospheric plate acts as a giant radiator of the heat cooling, thickening, and progressively subsiding from ridge to trench. As a result, spreading seafloor, affected by moving plates, creates an axial rift, corrugated hills and ridges formed by the nearby faults. Moreover, plate subduction activates such processes as trench roll-back, arc rupture and back-arc rifting of the two interconnected back-arc basins: the Parece Vela and the Shikoku Basins. The \ac{kpr}, a remnant arc of the active \ac{ibm} system results from the spreading of the Shikoku Basin (Fig. \ref{pic1}). 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{Fig1.jpg}
+\caption{Geologic map of the \ac{psb}. Solid red lines indicate boundaries between the lithospheric plates. Yellow fronts denote trench axes. Tectonic slab contours are depicted by the red dashed lines. Green arrows and relevant numbers indicate the convergence rates (mm/year) along the trenches. Magenta triangles denote hydrothermal areas mostly located along the Ryukyu Trench. Source: author.}
+\label{pic1}
+\end{figure}
+
+In such a way, it plays a key role in the subduction process of the west \ac{psp}: the subduction zone here is characterised by the subducting beneath the Kyushu Arc, Fig. \ref{pic1} \cite{Cao}. A set of geodynamic processes including subduction-interface rheology, phase-transition buoyancy, slab stagnation, rollback of mantle and ridge-push effects, cause significant trench motion of the \ac{ibm} detected as advance by global plate-motion observations \cite{Bina,Cizkova}. 
+
+\section{Materials and Methods}
+\subsection{Seismic mapping}
+
+Current paper presents a report on the \ac{gmt} cartographic techniques applied for geophysical mapping. Focal mechanisms (Fig. \ref{pic2}) were drawn using the 'psmeca' module of \ac{gmt} that reads dataset values from the \ac{ascii} file and generates a PostScript code plotting focal mechanisms. The full codes used for mapping in this study are available in the GitHub repository of the author in open access for repeatability in similar studies: \\ \href{https://github.com/paulinelemenkova/Mapping_seismic_moment_tensor_solutions}{https://github.com/paulinelemenkova/Mapping\_seismic\_moment\_tensor\_solutions} 
+
+Focal mechanisms depict a commonly accepted theory of the focal depths of the earthquake showing a depth from the surface to the earthquake's origin (hypocenter). A dataset used in this study contains a significant amount of shallow earthquakes of the \ac{psb} with focal depths of several tens km (mostly $<50$), intermediate earthquakes with focal depths from 70 to 200 km, and also a few earthquakes of the \ac{psb} with a deep focus reaching depths $> 500$ km, Table \ref{tab1}. The foci of the most \ac{psb} earthquakes are concentrated in the crust and upper mantle, \emph{i.e}, originate in the shallow parts of the Earth's interior.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Tab1.jpg}
+\caption{Earthquake events for 1976/1977}
+\label{tab1}
+\end{figure}
+
+The original dataset of the focal mechanism solutions are from the was taken from the Global \ac{cmt} Catalog, formerly known as the Harvard \ac{cmt} catalog \cite{Ekstrom}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{Fig2.jpg}
+\caption{Seismic map of the focal mechanisms: \ac{psb} margins. The centroid moment tensor solutions for shallow depth earthquakes of $Mw <10$ along the \ac{psb} margins, 1976 to 2010. Earthquakes along the tectonic plate subduction zone are shown by \ac{gmt}. Data: Global \ac{cmt} Project. Source: author.}
+\label{pic2}
+\end{figure}
+
+Technical parameters are set up as following: 
+\begin{enumerate}\itemsep -0.5em 
+  \item Moment magnitude (Mw) $<10$; 
+  \item Surface wave magnitude (Ms): $<10$);
+  \item Body wave magnitude (Mb): $<10$;  
+  \item Data time span: 1976-2010
+ \end{enumerate}
+ 
+While magnitude is a widely understood concept, describing the energy of the earthquake release on a logarithmic scale, some technical details are presented in Fig. \ref{tab1} and \ref{tab2} used for mapping velocity (Fig. \ref{pic4}), assigning and interpreting magnitudes. Introduced in the 1930's, the \ac{rs} is the best known scale for measuring the magnitude of earthquakes \cite{Mueller}. The \ac{ms}, creating the strongest disturbance within the upper layers of the Earth, is computed by the following algebraic formula:
+	$MS=log10(A/T)+1.66log10(D)+3.30$,
+where T is the measured wave period and D is the distance in radians. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Tab2.jpg}
+\caption{Magnitude and Moment Tensor for the region of the Philippine Sea basin}
+\label{tab2}
+\end{figure}
+
+In contrast, deep earthquakes do not generate large surface waves. Therefore, the \ac{mb} is scaled based on the seismic waves penetrating through the Earth's interior (body) \cite{Mueller}. The \ac{mb} is measured based on the maximum amplitude A by formula:
+	$Mb=log10(A/T)+Q(D,h)$,
+where T is the wave period and Q is an empirical function of focal depth h and epicentral distance D.
+		
+The \ac{mw} relies on an underlying robust physical and mathematical development through converting seismic moment using a formula calibrated to agree with the \ac{ms} over much of its range. Others parameters are taken as the default ones. The data are collected in both \ac{gmt} 'psvelomeca' and \ac{gmt} 'psmeca' input formats and examined. Final solution was for \ac{gmt} 'psmeca' (the reason is for the \ac{gmt} version 5.4.5 compatibility). The focal mechanisms are derived from a solution of the earthquakes' moment tensor, which is estimated by an analysis of the observed seismic waveforms. 
+	
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{Fig3.jpg}
+\caption{Geoid model based on \ac{egm2008} grid at \ac{psb} margins. Data: \cite{Pavlis}. Mapping: GMT. Source: author.}
+\label{pic3}
+\end{figure}
+
+Technically, the seismic moment tensor (Harvard \ac{cmt}, with zero trace) was plotted (Fig. \ref{pic2}) by 'psmeca' module using the following GMT code snippet: \\$gmt psmeca -R CMT.txt -J -Sd0.5/8/u -Gred -L0.1p -Fa/5p/it \\-Fepurple -Fgmagenta -Ft -W0.1p -Fz -Ewhite -O -K >> \$ps$.
+
+The scale (0.5) was adjusted to the scaling of the 'beach ball' radius, which is proportional to the magnitude. Here the '-Sd0.5/8/u' implies the scale, label size and annotation placement below the 'beach ball'. Filling the extensive quadrants was defined by -E parameter; -L parameter defines drawing the 'beach ball' outline of 0.1 pt. Shaded compressional quadrants of the focal mechanism 'beach ball' are colored by -Gred function. The -Fa/5p/it option was used to plot size, P\_axis\_symbol and T\_axis\_symbol, to compute and plot P and T axes with symbols (here: selected inverse triangle (i) and triangle (t), respectively). 
+
+The focal mechanisms (Fig. \ref{pic2}), visualised as commonly accepted in geophysical mapping 'beachballs', show a representation of the lower half of the focal sphere as viewed from above the focus at the earthquake epicenter and respective zones of compression and dilatation. Based on the recorded P-waves dataset, a graphical model shows red areas of the 'beachballs' as an upward moving, \emph{i.e.}, the compressional motion, while white areas – a downward, dilatational motion. Determining the geological information, such as the rupture of the Earth's surface, it depicts the two nodal planes, a fault and an auxiliary one. For instance, the auxiliary plane intersects the line of the fault plane between the circle and its centre of the 'beachball' with a general rule that the closer the intersection to the centre is, the more dominant is the strike slip. The increase of the curvature of the crossing hemispheres denotes a shallower dip.
+
+The strike of a nodal plane is measured in the degrees around the circle from the north to the line of the nodal plane. Based on the existing classification \cite{Mueller}, various focal plane solutions are shown as follows: \begin{itemize}\itemsep -0.5em 
+  \item normal fault striking north, dipping E/W at ca. 45°
+  \item oblique fault, right or left lateral and reverse slip
+  \item oblique fault, reverse slip dominant, with some right/left lateral 
+  \item oblique fault, strike slip dominant, attitude ca. N° 40W / 70° W (right/left lateral), or N35° E / 70° E (left/right lateral)
+ \end{itemize}
+     
+The geoid model was plotted based on the \ac{egm96} grid at \ac{psb} margins using the geophysical data \cite{Pavlis}, \ac{gmt}, Fig. \ref{pic3}. The earthquakes event map at \ac{psb} area (Fig. \ref{pic5}) shows the prime hypocentres and magnitude values by colour and size of the circles, respectively. The map was plotted on the basis of \ac{isc}-\ac{ehb} Bulletin and overplayed on the Google Earth map as a file in a \ac{kmz} format, which is an extension for a placemark file used by the Google Earth. The geographic coordinates include the x, y, z components in decimal degrees defined by the \ac{wgs84}, Fig. \ref{pic5}.
+	
+\subsection{Velocity mapping}	
+The velocity ellipses with 95\% confidence in rotated convention (red) and in (N, E) convention (green), on a \ac{psb} were plotted by 'psvelo' module of \ac{gmt} \cite{Wessel}. 
+	
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{Fig4.jpg}
+\caption{Velocity ellipses at \ac{psb} margins from 1976 to 2010 in (N, E) convention (green) and rotated convention (red).  Rotational wedges (purple 'gear wheels'): by 'psvelo' module of \ac{gmt}. Data: Global \ac{cmt} Project. Contour: \ac{gebco} grid. Source: author.}
+\label{pic4}
+\end{figure}
+
+The theoretical background of the best-fitting angular velocities and the \ac{morvel} is presented by \cite{DeMets2010} who described and modelled geologically current motions of 25 tectonic plates using geologically determined and geodetically constrained subsets of the global circuit. The datasets include the \ac{pvel} \cite{Sella}. Technical visualisation of the velocity map (Fig. \ref{pic4}) was performed using the following \ac{gmt} code snippet: 
+
+\begin{itemize}\itemsep -0.5em 
+  \item Velocity ellipses in (N,E) convention: $gmt psvelo CMT.txt -R -J \\-W0.3p,green -L -Ggreen -Se0.1/0.95/5 -A0.2p -O -K >> ps.$ Here, the Vscale gives the scaling of the velocity in inches; the CMT.txt is the dataset; parameters -R and -J indicate the region (here coordinates: -R120/152/4/35)
+   \item Velocity ellipses in rotated convention: $gmt psvelo CMT.txt -R -J \\-W0.3p,red -Sr0.1/0.95/5 -Ggreen -A0.2p -O -K >> ps.$ Here the 'Sr0.1/0.95/5' is the main kwargs showing the Vscale (0.1 inch), Confidence (0.95) and Fontsize (5pt).
+   \item Rotational wedges: $gmt psvelo CMT.txt -R -J -W0.05p -L -Sw0.5/1.e7 -D2 -Gslateblue2 -Elightgray -A0.2p -O -K >> ps.$ Here, the '-Sw0.5/1.e7' indicates Rotational wedges with kwargs as $Wedge\_scale$ and Wedge\_mag. The '-D2' parameter enables to rescale the uncertainties of velocities by \\$sigma\_scale$ (in this case 2 scale was set up). 
+ \end{itemize}
+
+The respective red and green circles with confidence ellipses are \ac{pvel} dataset estimates, which use a plate circuit to estimate subduction across the plate subduction zones in the west Pacific. According to \cite{DeMets1990}, relative to the \ac{psp}, the Pacific plate rotates counter-clockwise around a pole near the southern end of the plate boundary. The best-fitting angular velocity indicates rapid decrease of the convergence rates southward, from $49 pm 0.7 mm yr^{-1} (1\sigma)$ at the northern end of the \ac{ibm} to 9 pm 0.8 mm $yr^-1$ of orthogonal subduction along the southern Yap trench, south off Mariana Trench \cite{DeMets2010}.
+
+The \ac{psp}-Pacific plate velocities are estimated to fit the interval 1 mm yr-1 and 2° along the lithospheric plate boundary \cite{Sella}, which reflects the overlap in the \ac{gps} stations used to estimate the motions of the two plates. The existence of the Caroline plate was first proposed by \cite{Weissel} who estimated its motions from a synthesis of marine seismic, bathymetric, and seismologic observations from its boundaries with the and Pacific plates. Located in the western equatorial Pacific immediately south of the \ac{psp} (Fig. \ref{pic1}), it remains the poorly understood and one of the most enigmatic tectonic plates with uncertainties about the style and rate of its present deformation caused by the scarcity of reliable kinematic data. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{Fig5.jpg}
+\caption{Earthquakes event map at \ac{psb} area: prime hypocentres and magnitude values. Data source: http://www.isc.ac.uk/isc-ehb/search/catalogue/ \ac{isc}-\ac{ehb} Bulletin. Circle size shows a magnitude value. Circle colour shows a hypocenter depth in km (from red: 0 to dark blue/black: $>600$). Cartographic overlay of the .kmz data in a format of \ac{kml}: Google Earth Pro. Source: author.}
+\label{pic5}
+\end{figure}
+	
+\section{Results and Discussion}
+	
+Seismic activity is the \ac{psb} (Fig. \ref{pic2}) results from the tectonic processes at the edges of the lithospheric plates that spread apart at the ocean ridges along the large strike-slip faults and converge at the hot and weak volcanic island arcs of the \ac{ibm} and the Philippines. The seismicity map (Fig. \ref{pic2}) shows that the majority of earthquakes are confined to the marginal areas presenting a narrow, continuous belts around the large stable areas of the \ac{psp}. Seismic activity differs by the divergence and convergence zones from moderate in the zones of plate divergence to including deep shocks at shallow depths in the zones of plate convergence. Seismic data on focal mechanisms from the \ac{cmt} catalogue give a relative direction of the tectonic plates motion throughout the active belts. The focal mechanisms point at the motions of the lithosphere plates determined from the magnetic and topographic data associated with the zones of the plate divergence.
+
+A phenomena of the seismicity in the margins of the lithosphere plates has a tight correlation with the deep-sea trench formation which includes its migration depending primarily on the age of the trench \cite{Faccenna,Gutscher}. Thus, located in the place of the subduction plate boundary at a given time, a trench may change its location over time as a result of the complex processes of the global plate tectonics. As proved previously \cite{Lallemand}, trench migration and related geomorphic fluctuations depend on the lower plate parameters and largely controlled by the subducting plate velocity $V_{sub}$.
+	
+The \ac{psb} is marked by the complex interaction of three lithospheric plates: Eurasian, Australian and the \ac{psp}, which includes the processes of their collision, subduction and accretion. Old, heavy and large ($103,300,000 km^2$) Pacific plate plays the major role comparing to the Australian Plate ($47,000,000 km^2$) and the PSP $5,500,000 km^2$ \cite{Alden}. The morphology of the Pacific plate has a low dip angle at shallow depths. The PSP, a large and tectonically complex region of the western Pacific located between the Pacific, Eurasian and Australian plates, is the world’s largest marginal basin plate \cite{Sdrolias}. The \ac{psp} has two back-arc basins formed in Oligocene to Miocene period: Parece Vela and Shikoku Basins (Fig. \ref{pic1}). 
+
+Slab dynamics is one of the important driving forces for the submarine seismicity and trench formation affecting the mechanisms of its migration (retreat or advance). It is therefore crucial to characterise the origin of the subducting slab morphology in the deep mantle identifying the features of subduction zones, which are among the fundamental issues of solid Earth \cite{Yoshida}. Other impacts are caused by the effects of slab mineralogy and phase chemistry on the subduction dynamics (buoyancy, stress field), kinematics (rate of subduction and plate motion), elasticity (deformation and seismic wave speed), thermometry (effects of latent heat, isobaric superheating) and seismicity (adiabatic shear instabilities), as discussed previously \cite{Bina}. 
+
+\section{Conclusion}
+
+This paper has extended the practical applications of cartographic scripting and presented a novel series of geophysical maps on \ac{psp} for analysis of the seismicity in the western part of the Pacific Ocean. Th idea of scripting in cartographic workflow is to model the geospatial datasets by a series of codes written using the \ac{gmt} syntax and run from a console. Such an approach strengthens the cartographic workflow through automation of tasks and helps avoiding human-induced errors possible by traditional mapping. The presented geophysical maps benefit from the programming principle embedded in the \ac{gmt} syntax and general coding theory. 
+
+The proposed algorithm of the script-based mapping exhibits the advantages that balance the accuracy of cartographic data visualisation and the complexity of geophysical setting in one of the most seismically active regions of the world, -- the west Pacific Ocean. Theoretical results on the robustness of geophysical data bound in the presented mapping algorithm are given, and the maps present a complementray sources of information regarding the seismicity in the \ac{psb} region. Application of the \ac{gmt} for geophysical data processing optimises the resulting maps using the method of machine-based plotting through the modular approach of \ac{gmt}.
+ 
+The present article introduced a generic cartographic framework for mapping geophysical datasets that were combined with multi-source grids, as explained in detailed in the snippet of codes. The geophysical data includeded a compilation of \ac{gebco}, ETOPO1, ETOPO5, \ac{cmt}, \ac{egm96}, GVP and \ac{gshhgd}. Alos, this study presented an integrated analysis of the seismic and tectonic settings in the \ac{psb}. These include visualising the focal mechanisms, velocity and geological lineaments, volcanic activity and general topography of the ocean seafloor in the \ac{psp} that are essential for understanding the complex topography of the seabed. 
+
+The novelty of this study consists in a script-based data processing for geophysical analysis performed on the \ac{psb}. The seismicity data included earthquake locations, magnitude and intensity via the \ac{gmt} modules. Practical novelty of the work consists in the tested methodology of the \ac{gmt}-based geophysical data visualisation using available techniques \cite{Lemenkova2022a,Lemenkova2022b} as a combination of the geophysical visualisation, geological analysis and \ac{gmt}-based mapping of the \ac{psb}. 
+
+In contrast to the state-of-the-art mapping using \ac{gui}, \emph{e.g.}, GRASS GIS, SAGA GIS, QGIS \cite{Lemenkova2021d,Lemenkova2020e,Klauco2013,Klauco2017,Lemenkova2021b}, or statistical approaches \cite{Lemenkova2019e,Lemenkova2019f}, the \ac{gmt} is notable for scripting algorithms as a core conceptual idea. Thus, compared to the conventional \ac{gis}, the \ac{gmt} proposes a more advanced solution on automation through the script-based mapping which results in a high quality mapping \cite{Lemenkova2020a,Lemenkova2020b,Lemenkova2020f,Lemenkova2020h,Lemenkova2020d}. Specifically, among other modules, the 'psmeca', 'psvelo' were tested and demonstrated as useful tools for geophysical mapping. The semi-automated methods of cartographic data handling is driven by the developed algorithms of console-based scripts \cite{Lemenkova2020c}. The use of scripts in a cartographic workflow minimises handmade routine and subjectivity and increases the overall precision and accuracy of mapping. 
+
+Rigorous evaluation of the open source \ac{gis} data on the southern side of the \ac{psb} showed that current geophysical situation is largely affected by the geologic evolution of the \ac{psb}. Technically, the performed mapping by \ac{gmt} showed that the scripting cartographic algorithms outperform the state-of-the-art \ac{gis} software in terms of data processing and handling. This is achieved via the use of scripts that have a high accuracy of plotting. Besides, scripts may be reused as templates, modified and optimised for similar studies on the geophysics of the Pacific Ocean. This increases the value of programming in a cartographic workflow for future studies.
+
+%\small
+\footnotesize
+\singlespacing
+\printacronyms[name=Acronyms and Abbreviations, heading=section]
+
+\begin{acknowledgement}
+The author owes her gratitude to the anonymous reviewers who performed careful reading and a rigorous review of this manuscript. The author acknowledges the help from the Technical Editor Mrs. Margareta Oancea and the Editors of the Romanian Academy Publishing House. 
+\end{acknowledgement}
+
+\begin{thebibliography}{99}
+
+\bibitem{Alden}A. Alden, Here are the Sizes of Tectonic or Lithospheric Plates (2019). Retrieved from https://www.thoughtco.com/sizes-of-tectonic-or-lithospheric-plates-4090143 
+
+\bibitem{Bina}C.R. Bina, S. Stein, F.C. Marton, E.M. Van Ark, Phys. Earth Planet. Inter. \textbf{127}, 51--66 (2001). \href{https://doi.org/10.1016/S0031-9201(01)00221-7}{doi: 10.1016/S0031-9201(01)00221-7}
+
+\bibitem{Cao} L. Cao, Z. Wang, S. Wu, X. Gao, Tectonophysics \textbf{636}, 158--169 (2014). \href{https://doi.org/10.1016/j.tecto.2014.08.012}{doi: 10.1016/j.tecto.2014.08.012}
+
+\bibitem{Chang} W.Y. Chang, G.K. Yu, R.D. Hwang, J.K. Chiu, Terr. Atmospheric Ocean. Sci. \textbf{18}, 859--878 (2007). \href{https://doi.org/10.3319/TAO.2007.18.5.859(T)}{doi: 10.3319/TAO.2007.18.5.859(T)}
+
+\bibitem{Cizkova} H. Cížková, C.R. Bina, Earth Planet. Sci. Lett. E. \textbf{430}, 408--415 (2015). \href{https://doi.org/10.1016/j.epsl.2015.07.004}{doi: 10.1016/j.epsl.2015.07.004}
+
+\bibitem{DeMets1990} C. DeMets, R.G. Gordon, D.F. Argus, S. Stein, Geophys. J. Int. \textbf{101}, 425--478 (1990). \href{https://doi.org/10.1111/j.1365-246X.1990.tb06579.x}{doi: 10.1111/j.1365-246X.1990.tb06579.x}
+
+\bibitem{DeMets2010} C. DeMets, R.G. Gordon, D.F. Argus, Geophys. J. Int. \textbf{181}, 1--80 (2010). \href{https://doi.org/10.1111/j.1365-246X.2009.04491.x}{doi: 10.1111/j.1365-246X.2009.04491.x}
+
+\bibitem{Ekstrom} G. Ekstr\"om, M. Nettles, A.M. Dziewonsski, Phys. Earth Planet. Inter. \textbf{200--201}, 1--9 (2012). \href{https://doi.org/10.1016/j.pepi.2012.04.002}{doi: 10.1016/j.pepi.2012.04.002}
+
+\bibitem{Faccenna} C. Faccenna, E.D. Giuseppe, F. Funiciello, S. Lallemand, J. van Hunen, Earth Planet. Sci. Lett. \textbf{288}, 386--398 (2009). \href{https://doi.org/10.1016/j.epsl.2009.09.042}{doi: 10.1016/j.epsl.2009.09.042}
+
+\bibitem{Lemenkova2022c}P. Lemenkova, Geosciences, \textbf{12}(3), 140 (2022). \href{https://doi.org/10.3390/geosciences12030140}{doi: 10.3390/geosciences12030140}
+
+\bibitem{HILL1957129} M.N. Hill, Phys. Chem. Earth, \textbf{2}, 129--163 (1957). \href{https://doi.org/10.1016/0079-1946(57)90008-3}{doi: 10.1016/0079-1946(57)90008-3}.
+
+\bibitem{TANGYOUBIAO1990219} Y. Tang, D. Cao, Phys. Chem. Earth, \textbf{17}, 219--226 (1990). \href{https://doi.org/10.1016/0079-1946(89)90028-1}{doi: 10.1016/0079-1946(89)90028-1}.
+
+\bibitem{Lemenkova2020f} P. Lemenkova, Misc. Geogr. \textbf{25}(3), 1--13 (2020). \href{https://doi.org/10.2478/mgrsd-2020-0038}{doi: 10.2478/mgrsd-2020-0038}
+
+\bibitem{Fujioka1999} K. Fujioka, K. Okino, T. Kanamatsu, Y. Ohara, O. Ishizuka, S. Haraguchi, T. Ishii, Geology \textbf{27}, 1135--1138 (1999). \href{https://doi.org/10.1130/0091-7613(1999)027<1135:EESCIT>2.3.CO;2}{doi: 10.1130/0091-7613(1999)027<1135:EESCIT>2.3.CO;2}
+
+\bibitem{Fujioka2002} K. Fujioka, K. Okino, T. Kanamatsu, Y. Ohara, Geophys. Res. Lett. \textbf{29}, 13--72 (2002). \href{https://doi.org/10.1029/2001GL013595}{doi: 10.1029/2001GL013595}
+
+\bibitem{Lemenkova2022a} P. Lemenkova, Estonian J. Earth Sci. \textbf{71}(2), 61--79 (2022). \href{https://doi.org/10.3176/earth.2022.05}{doi: 10.3176/earth.2022.05}
+
+\bibitem{Gong} W. Gong, X. Jiang, Y. Guo, J. Xing, C. Li, Y. Sun, J. Asian Earth Sci. \textbf{146}, 265--278 (2017). \href{https://doi.org/10.1016/j.jseaes.2017.05.032}{doi: 10.1016/j.jseaes.2017.05.032}
+
+\bibitem{SACKS19843} I.S. Sacks, J.A. Snoke, Phys. Chem. Earth \textbf{15}, 3--37 (1984). \href{https://doi.org/10.1016/0079-1946(84)90003-X}{doi: 10.1016/0079-1946(84)90003-X}.
+
+\bibitem{QINGYUN2021103504} Q. Di, F. Tian, Y. Suo, R. Gao, S. Li, C. Fu, G. Wang, F. Li, Y. Tan, Earth-Sci. Rev. \textbf{214}, 103504 (2021). \href{https://doi.org/10.1016/j.earscirev.2021.103504}{doi: 10.1016/j.earscirev.2021.103504}.
+
+\bibitem{Lemenkova2019e} P. Lemenkova, Aquatic Sciences and Engineering, \textbf{34}(2), 51--60 (2019). \href{https://doi.org/10.26650/ASE2019547010}{doi: 10.26650/ASE2019547010}
+	
+\bibitem{Gutscher} M.A. Gutscher, F. Klingelhoefer, T. Theunissen, W. Spakman, T. Berthet, T.K. Wang, C.S. Lee, Tectonophysics, \textbf{692}, 131--142 (2016). \href{https://doi.org/10.1016/j.tecto.2016.03.029}{doi: 10.1016/j.tecto.2016.03.029}
+
+\bibitem{Lemenkova2020g} P. Lemenkova, Geomat. Environ. Eng. \textbf{14}(4), 25--45 (2020). \href{https://doi.org/10.7494/geom.2020.14.4.25}{doi: 10.7494/geom.2020.14.4.25}
+
+\bibitem{Hall1995a} R. Hall, J.R. Ali, C.D. Anderson, S.J. Baker, Tectonophysics, \textbf{251}, 229--250 (1995). \href{https://doi.org/10.1016/0040-1951(95)00038-0}{doi: 10.1016/0040-1951(95)00038-0}
+
+\bibitem{Hall1995b} R. Hall, M. Fuller, J.R. Ali, C.D. Anderson, Geophys. Monogr. Ser. AGU, Active Margins and Marginal Basins of the Western Pacific, \textbf{88}, 371--404 (1995). \href{https://doi.org/10.1029/GM088p0371}{doi: 10.1029/GM088p0371}
+
+\bibitem{Lemenkova2020a} P. Lemenkova, Bull. Geogr. Phys. Geogr. Ser. \textbf{18}(1), 41--60 (2020). \href{https://doi.org/10.2478/bgeo-2020-0004}{doi: 10.2478/bgeo-2020-0004}
+
+\bibitem{BARRETTO2020106052} J. Barretto, R. Wood, J. Milsom, Mar. Geol. \textbf {419}, 106052 (2020). \href{https://doi.org/10.1016/j.margeo.2019.106052}{doi: 10.1016/j.margeo.2019.106052}
+
+\bibitem{Klauco2017} M. Klaučo, B. Gregorová, U. Stankov, V. Marković, P. Lemenkova, Environ. Eng. Manag. J. \textbf{2(16)}, 449--458 (2017). \href{https://doi.org/10.30638/eemj.2017.045}{doi: 10.30638/eemj.2017.045} 
+
+\bibitem{Klauco2013} M. Klaučo, B. Gregorová, U. Stankov, V. Marković, P. Lemenkova, Open Geosci. \textbf{5(1)}, 28--42 (2013). \href{https://doi.org/10.2478/s13533-012-0120-0}{doi: 10.2478/s13533-012-0120-0}
+
+\bibitem{Lallemand}S. Lallemand, A. Heuret, C. Faccenna, F. Funiciello, Tectonics, \textbf{27}, TC3014 (2008). \href{https://doi.org/10.1029/2007TC002212}{doi: 10.1029/2007TC002212}
+
+\bibitem{LinLo} J.Y. Lin, C.L. Lo, J. Asian Earth Sci. \textbf{66}, 215--223 (2013). \href{https://doi.org/10.1016/j.jseaes.2013.01.009}{doi: 10.1016/j.jseaes.2013.01.009}
+
+\bibitem{Menard} H.W. Menard, Am. Assoc. Pet. Geol. Bull. \textbf{39}, 236--255 (1955).
+
+\bibitem{Lemenkova2021c}P. Lemenkova, Geophysica \textbf{56}(1--2), 3--26 (2021). \href{https://doi.org/10.5281/zenodo.5779189}{doi: 10.5281/zenodo.5779189}
+
+\bibitem{Mueller} D. M\"uller, University of Sydney, School of Geosciences, Division of Geology and Geophysics, GEOL Geological Hazards and Solutions (2001).
+
+\bibitem{Ogawa} Y. Ogawa, K. Kobayashi, H. Hotta, K. Fujioka, Mar. Geol. \textbf{141}, 111--123 (1997). \href{https://doi.org/10.1016/S0025-3227(97)00059-5}{doi: 10.1016/S0025-3227(97)00059-5}
+
+\bibitem{Lemenkova2019a} P. Lemenkova, Geogr. Tech. \textbf{14}(2), 39--48 (2019). \href{https://doi.org/10.21163/GT_2019.142.04}{doi: 10.21163/GT\_2019.142.04}
+
+\bibitem{Uchida} N. Uchida, T. Matsuzawa, J. Nakajima, A. Hasegawa, J. Geophys. Res. Solid Earth \textbf{115}(B7) (2010). \href{https://doi.org/10.1029/2009JB006962}{doi: 10.1029/2009JB006962}
+
+\bibitem{7951907} Z. Ma, 2017 IEEE 2nd Intl. Conf. Cloud Computing and Big Data Analysis (ICCCBDA), 180--184 (2017). \href{https://doi.org/10.1109/ICCCBDA.2017.7951907}{doi: 10.1109/ICCCBDA.2017.7951907}
+
+\bibitem{Lemenkova2019b} P. Lemenkova, Geod. Cartogr. \textbf{45}(2), 57--84 (2019). \href{https://doi.org/10.3846/gac.2019.3785}{doi: 10.3846/gac.2019.3785}
+
+\bibitem{Ozawa} A. Ozawa, T. Tagami, E.L. Listanco, C.B. Arpa, M. Sudo, J. Asian Earth Sci. \textbf{23}, 105--111 (2004). \href{https://doi.org/10.1016/S1367-9120(03)00112-3}{doi: 10.1016/S1367-9120(03)00112-3}
+
+\bibitem{Pavlis} N.K. Pavlis, S.A. Holmes, S.C. Kenyon, J.K. Factor, J. Geophys. Res. \textbf{117}, B04406 (2012). \href{https://doi.org/10.1029/2011JB008916}{doi: 10.1029/2011JB008916}
+
+\bibitem{Lemenkova2021a} P. Lemenkova, Rud. Geolosko Naft. Zb. \textbf{36}(4), 33--48 (2021). \href{https://doi.org/10.17794/rgn.2021.4.4}{doi: 10.17794/rgn.2021.4.4}
+
+\bibitem{6910592} M. Zhang, P. Yue, X. Guo, 2014 The Third Intl. Conf. Agro-Geoinformatics (2014), 1--5.  \href{https://doi.org/10.1109/Agro-Geoinformatics.2014.6910592}{doi: 10.1109/Agro-Geoinformatics.2014.6910592}
+
+\bibitem{Samowitz} I.R. Samowitz, D.W. Forsyth, J. Geophys. Res. \textbf{86}, 7013--7021 (1981). \href{https://doi.org/10.1029/JB086iB08p07013}{doi: 10.1029/JB086iB08p07013}
+
+\bibitem{Lemenkova2020h} P. Lemenkova, Glas. Srp. Geogr. Drus. \textbf{100}(2), 1--23 (2020). \href{https://doi.org/10.2298/GSGD2002001L}{doi: 10.2298/GSGD2002001L}
+
+\bibitem{KIMURA200918} H. Kimura, K. Kasahara, T. Takeda, Tectonophysics \textbf{472}(1), 18--27 (2009). \href{https://doi.org/10.1016/j.tecto.2008.05.012}{doi: 10.1016/j.tecto.2008.05.012}.
+
+\bibitem{PARCUTELA2020100032} N.E. Parcutela, C.B. Dimalanta, L.T. Armada, G.P. Yumul, J. Asian Earth Sci.: X. \textbf{4}, 100032 (2020). \href{https://doi.org/10.1016/j.jaesx.2020.100032}{doi: 10.1016/j.jaesx.2020.100032}
+
+\bibitem{SUZUKI201690} K. Suzuki, M. Nakano, N. Takahashi, T. Hori, S. Kamiya, E. Araki, R. Nakata, Y. Kaneda, Tectonophysics \textbf{680}, 90--98 (2016). \href{https://doi.org/10.1016/j.tecto.2016.05.012}{10.1016/j.tecto.2016.05.012}.
+
+\bibitem{Lemenkova2021d} P. Lemenkova, Czech Polar Rep. \textbf{11}(1), 67--85 (2021). \href{https://doi.org/10.5817/CPR2021-1-6}{doi: 10.5817/CPR2021-1-6}
+
+\bibitem{Buetal} X. Bu, P. Yue, L. Wang, M. Zhang, 2015 Fourth Intl. Conf. Agro-Geoinformatics (Agro-geoinformatics),15--18 (2015). \href{https://doi.org/10.1109/Agro-Geoinformatics.2015.7248095}{doi: 10.1109/Agro-Geoinformatics.2015.7248095}
+
+\bibitem{9497221} S. Bhattacharjee, L.B.A. Rahim, 2021 Intl. Conf. Computer Information Sciences (ICCOINS) 372--377 (2021).  \href{https://doi.org/10.1109/ICCOINS49721.2021.9497221}{doi: 10.1109/ICCOINS49721.2021.9497221}
+
+\bibitem{Lemenkova2021e}P. Lemenkova, Baltica \textbf{34}(1), 27--46 (2021). \href{https://doi.org/10.5200/baltica.2021.1.3}{doi: 10.5200/baltica.2021.1.3}
+
+\bibitem{ZU2021106800} Q. Zu, C.-H. Chen, C.-R. Chen, S. Liu, H.-Y. Yen, Phys. Earth Planet. Inter. \textbf{320}, 106800 (2021). \href{https://doi.org/10.1016/j.pepi.2021.106800}{doi: 10.1016/j.pepi.2021.106800}.
+
+\bibitem{SAITO2019228166} T. Saito, T. Baba, D. Inazu, S. Takemura, E. Fukuyama, Tectonophysics \textbf{769}, 228166 (2019). \href{https://doi.org/10.1016/j.tecto.2019.228166}{doi: 10.1016/j.tecto.2019.228166}.
+
+\bibitem{Lemenkova2020d}P. Lemenkova, Ann. Univ. Mariae Curie-Skłodowska, B Geogr. Geol. Mineral. Petrogr. \textbf{75}, 115--141 (2020). \href{https://doi.org/10.17951/b.2020.75.115-141}{doi: 10.17951/b.2020.75.115-141}
+
+\bibitem{Sdrolias} M. Sdrolias, W.R. Roest, R.D. M\"uller, Tectonophysics, \textbf{394} 69--86 (2004). \href{https://doi.org/10.1016/j.tecto.2004.07.061}{doi: 10.1016/j.tecto.2004.07.061}
+
+\bibitem{7363985} Y. Yan, L. Huang, L. Yi, 2015 IEEE Intl. Conf. Big Data (Big Data), 2036--2045 (2015).  \href{https://doi.org/10.1109/BigData.2015.7363985}{doi: 10.1109/BigData.2015.7363985}
+
+\bibitem{Lemenkova2019f}P. Lemenkova, GeoSci. Eng. \textbf{65}(4), 1--22 (2019). \href{https://doi.org/10.35180/gse-2019-0020}{doi: 10.35180/gse-2019-0020}
+
+\bibitem{LI2020102127} B. Li, Y. Li, W. Jiang, Z. Su, W. Shen, Int. J. Appl. Earth Obs. Geoinf. \textbf{90}, 102127 (2020). \href{https://doi.org/10.1016/j.jag.2020.102127}{doi: 10.1016/j.jag.2020.102127}.
+
+\bibitem{Lemenkova2020c}P. Lemenkova, Pol. Polar Res. \textbf{42}(1), 1--23 (2020). \href{https://doi.org/10.24425/ppr.2021.136510}{doi: 10.24425/ppr.2021.136510}
+
+\bibitem{Seekings} L.C. Seekings, T.L. Teng, J. Geophys. Res. \textbf{82}, 317--324 (1977). \href{https://doi.org/10.1029/JB082i002p00317}{doi: 10.1029/JB082i002p00317}
+
+\bibitem{Sella} G.F. Sella, T.H. Dixon, A. Mao, J. Geophys. Res. \textbf{107}, 11--30 (2002). \href{https://doi.org/10.1029/2000JB000033}{doi: 10.1029/2000JB000033}
+
+\bibitem{Lemenkova2022b} P. Lemenkova, Environ. Res. Eng. Manag.  \textbf{78(1)}, 83--96 (2022). \href{https://doi.org/10.5755/j01.erem.78.1.29963}{doi: 10.5755/j01.erem.78.1.29963}
+
+\bibitem{HORI200685} S. Hori, Tectonophysics, \textbf{417}(1), 85--100 (2006). \href{https://doi.org/10.1016/j.tecto.2005.08.027}{doi: 10.1016/j.tecto.2005.08.027}
+
+\bibitem{Lemenkova2020b} P. Lemenkova, Geod. Cartogr. \textbf{46}(3), 98--112 (2020). \href{https://doi.org/10.3846/gac.2020.11524}{doi: 10.3846/gac.2020.11524}
+
+\bibitem{Weissel} J.K. Weissel, R.N. Anderson, Earth Planet. Sci. Lett. \textbf{41}, 143--158 (1978). \href{https://doi.org/10.1016/0012-821X(78)90004-3}{doi: 10.1016/0012-821X(78)90004-3}
+
+\bibitem{Lemenkova2020e}P. Lemenkova, Transylv. Rev. Syst. Ecol. Res., \textbf{22}(3), 17--34 (2020). \href{https://doi.org/10.2478/trser-2020-0015}{doi: 10.2478/trser-2020-0015}
+
+\bibitem{Wessel} P. Wessel, W.H.F. Smith, EOS Trans. AGU \textbf{79(47)}, 579--579 (1998). \href{https://doi.org/10.1029/98EO00426}{doi: 10.1029/98EO00426}
+
+\bibitem{IIDAKA201741} T. Iidaka, T. Igarashi, A. Hashima, A. Kato, T. Iwasaki, Tectonophysics, \textbf{717}, 41--50 (2017). \href{https://doi.org/10.1016/j.tecto.2017.07.010}{doi: 10.1016/j.tecto.2017.07.010}
+
+\bibitem{Lemenkova2021b} P. Lemenkova, Kartogr. i Geoinformacije \textbf{20}(36), 16--37 (2021). \href{https://doi.org/10.32909/kg.20.36.2}{doi: 10.32909/kg.20.36.2}
+
+\bibitem{Yoshida} M. Yoshida, Phys. Earth Planet. Inter. \textbf{268}, 35--53 (2017). \href{https://doi.org/10.1016/j.pepi.2017.05.004}{doi: 10.1016/j.pepi.2017.05.004}
+
+\end{thebibliography}
+
+\end{document}
