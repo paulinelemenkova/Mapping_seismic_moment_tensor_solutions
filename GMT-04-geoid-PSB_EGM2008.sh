@@ -37,26 +37,26 @@ gmt grdimage geoid_PSB2.grd -Ccolors1.cpt -R120/152/4/35 -JM16c -P -I+a15+ne0.75
 #gmt grdimage geoid_PSB2.grd -Ccolors1.cpt -R120/152/4/35 -JPoly/6i -P -I+a15+ne0.75 -Xc -O -K >> $ps
 
 # Add shorelines
-gmt grdcontour geoid_PSB1.grd -R -J -C2 -A2+f6p,Helvetica,black -Wthinnest,dimgray -O -K >> $ps
-gmt grdcontour geoid_PSB2.grd -R -J -C2 -A2+f6p,Helvetica,black -Wthinnest,dimgray -O -K >> $ps
+gmt grdcontour geoid_PSB1.grd -R -J -C2 -A2+f6p,0,black -Wthinnest,dimgray -O -K >> $ps
+gmt grdcontour geoid_PSB2.grd -R -J -C2 -A2+f6p,0,black -Wthinnest,dimgray -O -K >> $ps
 
 # Add grid
 gmt psbasemap -R -J \
     -Bpx104f5a5 -Bpyg10f5a5 -Bsxg5 -Bsyg5 \
     --MAP_TITLE_OFFSET=1.0c \
     --MAP_ANNOT_OFFSET=0.1c \
-    --FONT_TITLE=12p,Helvetica,black \
-    --FONT_ANNOT_PRIMARY=7p,Helvetica,black \
-    --FONT_LABEL=8p,Helvetica,black \
+    --FONT_TITLE=12p,0,black \
+    --FONT_ANNOT_PRIMARY=9p,0,black \
+    --FONT_LABEL=9p,0,black \
     --MAP_FRAME_AXES=WEsN \
     -B+t"Geoid gravitational regional model: Philippine Sea basin" \
     -Lx13.0c/-2.2c+c318/-57+w700k+l"Mercator projection. Scale: km"+f \
     -UBL/0p/-65p -O -K >> $ps
     
 gmt psscale -Dg120.0/1.9+w15.0c/0.4c+h+o0.3/0i+ml -R -J -Ccolors.cpt \
-    --FONT_LABEL=7p,Helvetica,black \
-    --FONT_ANNOT_PRIMARY=6p,Helvetica,black \
-    --MAP_ANNOT_OFFSET=0.1c \
+    --FONT_LABEL=9p,0,black \
+    --FONT_ANNOT_PRIMARY=8p,0,black \
+    --MAP_ANNOT_OFFSET=0.05c \
     -Ba10f2+l"Color scale: seis (R-O-Y-G-B seismic tomography colors [C=RGB] -65/77)" \
     -I0.2 -By+lm -O -K >> $ps
 
@@ -68,8 +68,8 @@ gmt logo -Dx6.2/-2.9+o0.1i/0.1i+w2c -O -K >> $ps
 
 # Add subtitle
 gmt pstext -R0/10/0/15 -JX10/10 -X0.5c -Y10.8c -N -O \
-    -F+f10p,Helvetica,black+jLB >> $ps << EOF
-2.2 10.0 World geoid image EGM2008 vertical datum 2.5 min resolution
+    -F+f10p,0,black+jLB >> $ps << EOF
+2.7 10.0 World geoid image EGM2008 vertical datum 2.5 min resolution
 EOF
 
 # Convert to image file using GhostScript
