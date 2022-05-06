@@ -2,8 +2,6 @@
 # Purpose: geological map
 # Area: Philippine Sea Basin
 # Mercator prj. GMT modules: gmtset, gmtdefaults, makecpt, grdcut, grdinfo, pscoast, psbasemap, grdcontour, project, psxy, pslegend, pstext, logo, psconvert
-# Generate a file
-ps=Geol_PSB.ps
 # GMT set up
 gmt set FORMAT_GEO_MAP=dddF \
     MAP_FRAME_PEN dimgray \
@@ -18,23 +16,30 @@ gmt set FORMAT_GEO_MAP=dddF \
     FONT_LABEL 8p,Helvetica,dimgray
 # Overwrite defaults of GMT
 gmtdefaults -D > .gmtdefaults
-# Step-4. Extract a subset of GEBCO for the study area
+
+# Generate a file
+ps=Geol_PSB.ps
+# Extract a subset of GEBCO for the study area
 gmt grdcut GEBCO_2019.nc -R120/152/4/35 -Gpsb_relief.nc
-# Step-6. Make raster image
-gmt grdimage psb_relief.nc -Cbathy.cpt -R120/152/4/35 -JM16c -P -I+a15+ne0.75 -Xc -K > $ps
+# Make raster image
+gmt grdimage psb_relief.nc -Cbathy -R120/152/4/35 -JM16c -P -I+a15+ne0.75 -Xc -K > $ps
 # Add elemens of basemap: title, grids, rose, scale, time stamp
 gmt psbasemap -R -J \
-    -B+t"Geological and tectonic settings of the Philippine Sea Basin" \
+    --MAP_FRAME_AXES=wESN \
+    --FONT_TITLE=12p,0,black \
+    --FONT_ANNOT_PRIMARY=9p,0,black \
+    --FONT_LABEL=9p,0,black \
+    -B+t"Geologic and tectonic settings of the Philippine Sea basin" \
     -Bpxg8f2a4 -Bpyg6f3a3 -Bsxg4 -Bsyg3 \
     -Lx13.0c/-3.0c+c50+w500k+l"Behrman cylindrical projection. Scale (km)"+f \
     -UBL/-0.2c/-3.0c -O -K >> $ps
 # Add bathymetric contours
 gmt grdcontour psb_relief.nc -R -J -C500 -W0.1p -O -K >> $ps
-# Step-7. Add color legend
-gmt psscale -Dg114.0/4+w17.0c/0.4c+v+o0.3/0i+ml -Rpsb_relief.nc -J -Cbathy.cpt \
-    --FONT_LABEL=8p,Helvetica,dimgray \
-    --FONT_ANNOT_PRIMARY=6p,Helvetica,black \
-    -Baf+l"Topographic color palette: bathy [R=-8000/0, C=RGB], via aquamarine at mid-depths" \
+# Add color legend
+gmt psscale -Dg115.2/4+w16.7c/0.4c+v+o0.3/0i+ml -Rpsb_relief.nc -J -Cbathy \
+    --FONT_LABEL=9p,0,black \
+    --FONT_ANNOT_PRIMARY=9p,0,black \
+    -Ba1000g500f100+l"Topographic color palette: bathy [R=-8000/0, C=RGB], via aquamarine at mid-depths" \
     -I0.2 -By+lm -O -K >> $ps
 # Add geological lines and points
 gmt makecpt -Crainbow -T0/700/50 -Z > rain.cpt
@@ -68,13 +73,13 @@ gmt pstext -R -J -N -O -K \
 135.0 4.1 CAROLINE PLATE
 EOF
 gmt pstext -R -J -N -O -K \
--F+f11p,Times-Roman,darkblue+jLB -Gwhite@30 >> $ps << EOF
-123.5 31.5 EAST
-123.5 30.7 CHINA
-123.5 30.0 SEA
+-F+f12p,0,darkblue+jLB >> $ps << EOF
+124.1 31.6 EAST
+124.1 30.8 CHINA
+124.1 30.1 SEA
 EOF
 gmt pstext -R -J -N -O -K \
--F+f8p,Palatino-Roman,black+jLB -Gwhite@20 >> $ps << EOF
+-F+f9p,0,black+jLB -Gwhite@20 >> $ps << EOF
 130 32.5 KYUSHU
 EOF
 gmt pstext -R -J -N -O -K \
@@ -147,7 +152,7 @@ gmt pstext -R -J -N -O -K \
 144.5 10.9 Trench
 EOF
 gmt pstext -R -J -N -O -K \
--F+f8p,Palatino-Roman,black+jLB+a-80 -Gwhite@30 >> $ps << EOF
+-F+f9p,0,black+jLB+a-80 -Gwhite@30 >> $ps << EOF
 140.3 33.0 I Z U - B O N I N  V O L C A N I C  A R C
 EOF
 gmt pstext -R -J -N -O -K \
@@ -159,8 +164,8 @@ gmt pstext -R -J -N -O -K \
 134.0 4.2 Palau Trench
 EOF
 gmt pstext -R -J -N -O -K \
--F+f9p,Palatino-Roman,black+jLB+a-350 -Gwhite@40 >> $ps << EOF
-136.0 5.7 West Caroline Trough
+-F+f10p,0,black+jLB+a-345 -Gwhite@40 >> $ps << EOF
+136.0 5.6 West Caroline Trough
 EOF
 gmt pstext -R -J -N -O -K \
 -F+f10p,Times−Bold,blue+jLB+a-290 -Gwhite@40 >> $ps << EOF
@@ -180,7 +185,7 @@ gmt pstext -R -J -N -O -K \
 145.0 25.4 Ogasawara Plateau
 EOF
 gmt pstext -R -J -N -O -K \
--F+f8p,Palatino-Roman,black+jLB -Gwhite@40 >> $ps << EOF
+-F+f9p,0,black+jLB -Gwhite@40 >> $ps << EOF
 134.0 23.0 SHIKOKU BASIN
 EOF
 # Arrows of tectonic plates movements
@@ -191,7 +196,7 @@ gmt psxy -R -J -Sv0.5c+bt+ea -Ggreen -W1.0p -O -K << EOF >> $ps
 EOF
 gmt pstext -R -J -N -O -K \
     -F+f9p,Helvetica,midnightblue+jLB -Gwhite@30 >> $ps << EOF
-147.5 35.3 90 mm/yr
+147.5 34.7 90 mm/yr
 146.2 32.5 60 mm/yr
 138.0 30.5 50 mm/yr
 EOF
@@ -204,7 +209,7 @@ gmt psxy -R -J -Sv0.5c+ea -Ggreen -W1.2p -O -K << EOF >> $ps
 134.4 28.6 140 1.2c
 EOF
 gmt pstext -R -J -N -O -K \
--F+jTL+f9p,Times-Roman,black+jLB -Gwhite@30>> $ps << EOF
+-F+jTL+f10p,0,black+jLB -Gwhite@30>> $ps << EOF
 126.7 21.7 71 mm/yr
 130.5 23.1 67 mm/yr
 132.0 24.2 62 mm/yr
@@ -229,18 +234,18 @@ gmt psxy -R -J -Sa -W0.2p,black -Gmagenta -O -K << EOF >> $ps
 124.3 25.2 0.3c
 EOF
 # Add legend
-gmt pslegend -R -J -Dx0.5/-2.5+w14.0c+o0.1/0.1c \
+gmt pslegend -R -J -Dx-2.1/-2.3+w18.6c+o0.1/0.1c \
     -F+pthin+ithinner+gwhite \
-    --FONT_ANNOT_PRIMARY=8p -O -K << FIN >> $ps
-N 3
+    --FONT_ANNOT_PRIMARY=9p -O -K << FIN >> $ps
+N 4
 S 0.3c f+l+t 0.7c yellow 0.01c 1.0c Hadal trench
 S 0.3c f+l+t 0.7c green 0.01c 1.0c Ridge
 S 0.3c f+l+t 0.7c purple 0.01c 1.0c Transform lines
 S 0.3c t 0.2c red 0.01c 1.0c Volcanoes
-S 0.5c v 0.8c khaki1 0.02c 1.0c Tectonic plates movements
+S 0.5c v 0.8c khaki1 0.02c 1.0c Tectonic plate movement
 S 0.3c - 0.8c - 0.5p,magenta 1.0c Fracture zones
-S 0.3c - 0.8c - 0.6p,red 1.0c Tectonic plates boundaries
-S 0.3c - 0.7c - 0.5p,violet 1.0c Magnetic anomaliy lines
+S 0.3c - 0.8c - 0.6p,red 1.0c Tectonic plate boundaries
+S 0.3c - 0.7c - 0.5p,violet 1.0c Magnetic anomalies
 S 0.3c - 0.7c - 0.6p,red,- 1.0c Tectonic slabs
 S 0.3c c 0.2c yellow 0.01c 1.0c Magnetic lineation picks
 S 0.3c c 0.2c orange 0.01c 1.0c Ophiolites
@@ -248,10 +253,10 @@ S 0.3c a 0.3c magenta 0.02c 1.0c Hydrothermal area
 FIN
 # Step-12. Add subtitle
 gmt pstext -R0/10/0/15 -JX10/10 -X0.5c -Y7.2c -N -O -K \
-    -F+f10p,Palatino-Roman,black+jLB >> $ps << EOF
+    -F+f11p,0,black+jLB >> $ps << EOF
 3.0 15.5 Base map: GEBCO bathymetric 15 arc sec grid dataset
 EOF
 # Add GMT logo
-gmt logo -Dx6.3/-1.2+o0.3c/-9.8c+w2c -O >> $ps
+gmt logo -Dx6.3/-0.8+o0.3c/-9.8c+w2c -O >> $ps
 # Convert to image file using GhostScript (portrait orientation, 720 dpi)
 gmt psconvert Geol_PSB.ps -A1.5c -E720 -Tj -P -Z
